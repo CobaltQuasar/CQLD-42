@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CQLD - Icon Matrix</title>
+    <style>
+        :root {
+            --quantum-blue: #0077ff;
+            --void-black: #0a0a0a;
+            --liminal-gray: #e0e0e0;
+            --hitchhiker-green: #44aa44;
+        }
+        
+        body {
+            background-color: var(--void-black);
+            color: var(--liminal-gray);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Compact Icon Grid */
+        .icon-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 35px;
+            padding: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quantum-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 39, 77, 0.3);
+            border: 1px solid #003366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--quantum-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .quantum-icon:hover {
+            border-color: var(--quantum-blue);
+            box-shadow: 0 0 15px rgba(0, 119, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* Hover Tooltip */
+        .quantum-icon::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            border: 1px solid var(--quantum-blue);
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+
+        .quantum-icon:hover::after {
+            opacity: 1;
+        }
+
+        /* Hitchhiker Corner */
+        .guide-corner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--hitchhiker-green);
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+	<!-- <h1 style="text-align: center; color: var(--quantum-blue); margin-right: 42px; text-color: red;">
+        CQLD SERVICE MATRIX      
+	</h1> -->
+
+    <!-- Icon Navigation Matrix -->
+    <div class="icon-matrix">
+	
+        <!-- Communication -->
+        <div class="quantum-icon" data-tooltip="Quantum Messaging">⊛</div>
+        
+        <!-- Information -->
+        <div class="quantum-icon" data-tooltip="Omni-Search">⌕</div>
+        
+        <!-- Commerce -->
+        <div class="quantum-icon" data-tooltip="Bazaar-9">⧉</div>
+        
+        <!-- Media -->
+        <div class="quantum-icon" data-tooltip="DreamStream">⟁</div>
+        
+        <!-- Productivity -->
+        <div class="quantum-icon" data-tooltip="Thought-2-Code">λ</div>
+        
+        <!-- Finance -->
+        <div class="quantum-icon" data-tooltip="Coin Singularity">◎</div>
+        
+        <!-- Storage -->
+        <div class="quantum-icon" data-tooltip="Data Nebula">♆</div>
+        
+        <!-- Travel -->
+        <div class="quantum-icon" data-tooltip="Wormhole GPS">⚷</div>
+    </div>
+
+<!-- Main Display Area - Corrected Version -->
+<div id="quantum-display" style="
+    margin: 10px;
+    height: calc(100vh - 180px); /* Dynamic height based on viewport */
+    width: calc(100% - 20px); /* Full width with margin */
+    border: 2px solid #003366;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 20, 40, 0.3);
+    overflow: hidden; /* Prevents scrollbars */
+">
+    <p style="color: #6699ff; font-size: 1.2em;">Select a quantum service icon</p>
+</div>
+
+    <!-- Hitchhiker's Guide Easter Egg -->
+    <div class="guide-corner" title="The Guide says: Don't Panic">
+        42
+    </div>
+
+    <script>
+        // This would handle service loading
+        document.querySelectorAll('.quantum-icon').forEach(icon => {
+            icon.addEventListener('click', () => {
+                document.getElementById('quantum-display').innerHTML = `
+                    <iframe src="${icon.dataset.tooltip.toLowerCase().replace(' ', '-')}.html" 
+                            style="width:100%; min-height: 840px; max-height: 2000px; border:none;"></iframe>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

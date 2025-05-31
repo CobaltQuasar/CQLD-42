@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quantum Messaging | CQLD</title>
+    <style>
+        :root {
+            --quantum-blue: #0077ff;
+            --void-black: #0a0a0a;
+            --liminal-gray: #e0e0e0;
+            --hitchhiker-green: #44aa44;
+            --message-bubble: #112233;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: var(--void-black);
+            color: var(--liminal-gray);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Fluid Container */
+        .messaging-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-height: -webkit-fill-available;
+        }
+
+        /* Responsive Header */
+        .message-header {
+            background: rgba(0, 39, 77, 0.3);
+            padding: clamp(10px, 2vh, 20px);
+            border-bottom: 1px solid var(--quantum-blue);
+            text-align: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .message-header h2 {
+            margin: 0;
+            color: var(--quantum-blue);
+            font-size: clamp(16px, 3vw, 24px);
+        }
+
+        .message-header::after {
+            content: "Entanglement: 42%";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: clamp(10px, 1.5vw, 14px);
+            color: var(--hitchhiker-green);
+        }
+
+        /* Adaptive Message List */
+        .message-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: clamp(8px, 1.5vh, 15px);
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23003366" /></svg>') #0a0a0a;
+        }
+
+        /* Dynamic Message Sizing */
+        .message {
+            margin-bottom: clamp(8px, 1.5vh, 15px);
+            max-width: 80%;
+            padding: clamp(6px, 1vh, 10px) clamp(10px, 1.5vw, 15px);
+            border-radius: clamp(10px, 2vw, 15px);
+            position: relative;
+            font-size: clamp(12px, 2vw, 16px);
+            word-break: break-word;
+        }
+
+        .received {
+            background-color: var(--message-bubble);
+            border: 1px solid #003366;
+            align-self: flex-start;
+        }
+
+        .sent {
+            background-color: #003355;
+            border: 1px solid var(--quantum-blue);
+            align-self: flex-end;
+        }
+
+        .message-time {
+            font-size: clamp(10px, 1.5vw, 12px);
+            color: #6699ff;
+            margin-top: clamp(3px, 0.5vh, 5px);
+            text-align: right;
+        }
+
+        /* Flexible Input Area */
+        .message-input {
+            display: flex;
+            padding: clamp(8px, 1.5vh, 15px);
+            border-top: 1px solid #003366;
+            background: rgba(0, 39, 77, 0.3);
+            flex-shrink: 0;
+        }
+
+        .message-input input {
+            flex: 1;
+            background: #112233;
+            border: 1px solid #003366;
+            color: var(--liminal-gray);
+            padding: clamp(8px, 1.5vh, 12px);
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: clamp(12px, 2vw, 16px);
+            min-height: 20px;
+        }
+
+        .message-input button {
+            background: var(--quantum-blue);
+            color: var(--void-black);
+            border: none;
+            padding: 0 clamp(12px, 3vw, 20px);
+            margin-left: clamp(5px, 1.5vw, 10px);
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: clamp(12px, 2vw, 16px);
+            min-width: 60px;
+        }
+
+        .quantum-signature {
+            position: absolute;
+            bottom: clamp(2px, 0.5vh, 5px);
+            right: clamp(5px, 1vw, 10px);
+            font-size: clamp(8px, 1.5vw, 10px);
+            color: var(--hitchhiker-green);
+        }
+
+        /* Mobile Landscape Adaptation */
+        @media (max-height: 500px) {
+            .message-header h2 {
+                font-size: clamp(14px, 3vh, 18px);
+            }
+            .message {
+                max-width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="messaging-container">
+        <div class="message-header">
+            <h2>⊛ QUANTUM MESSAGING</h2>
+        </div>
+        
+        <div class="message-list" id="messageList">
+            <div class="message received">
+                Ford Prefect: So long and thanks for all the fish!
+                <div class="message-time">11:42:17 • TODAY</div>
+            </div>
+            
+            <div class="message sent">
+                Me: Wait what about my towel?
+                <div class="message-time">11:42:42 • TODAY</div>
+                <div class="quantum-signature">Quassari</div>
+            </div>
+        </div>
+        
+        <div class="message-input">
+            <input type="text" id="messageInput" placeholder="Type message (⊚)" 
+                   aria-label="Message input">
+            <button onclick="sendMessage()">SEND</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const messageList = document.getElementById('messageList');
+            
+            if (input.value.trim() === '') return;
+            
+            // Create new message
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message sent';
+            messageDiv.innerHTML = `
+                ${input.value}
+                <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • TODAY</div>
+                <div class="quantum-signature">Entangled</div>
+            `;
+            
+            messageList.appendChild(messageDiv);
+            input.value = '';
+            
+            // Auto-scroll with animation
+            messageList.scrollTo({
+                top: messageList.scrollHeight,
+                behavior: 'smooth'
+            });
+            
+            // Quantum reply simulation
+            if (Math.random() > 0.3) {
+                setTimeout(() => {
+                    const replies = [
+                        "TRANSMISSION LOST IN DIMENSIONAL CROSSFIRE",
+                        "Message received by your 42nd alternate self",
+                        "The Dolphins respond: 'So long!'",
+                        "Zaphod says: 'That was un-cool, man'",
+                        "Vogon reply: Your message has been processed (and ignored)"
+                    ];
+                    
+                    const replyDiv = document.createElement('div');
+                    replyDiv.className = 'message received';
+                    replyDiv.innerHTML = `
+                        System: ${replies[Math.floor(Math.random() * replies.length)]}
+                        <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • TODAY</div>
+                    `;
+                    
+                    messageList.appendChild(replyDiv);
+                    messageList.scrollTo({
+                        top: messageList.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }, 800 + Math.random() * 1200);
+            }
+        }
+        
+        // Send message on Enter
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Focus input on load
+        window.addEventListener('load', () => {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html>
